@@ -1,0 +1,12 @@
+{
+  "name": "sfadles/number-to-stringConverter",
+  "description": "Converts numbers to text",
+  "require": {
+    "php": "^5.4 || ^7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Sfadless\\Utils\\": "src"
+    }
+  }
+}
