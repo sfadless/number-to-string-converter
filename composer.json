@@ -1,5 +1,5 @@
 {
-  "name": "sfadles/number-to-stringConverter",
+  "name": "sfadles/number-to-string-converter",
   "description": "Converts numbers to text",
   "require": {
     "php": "^5.4 || ^7.0"
