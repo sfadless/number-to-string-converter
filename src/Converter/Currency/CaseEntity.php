@@ -32,11 +32,12 @@ class CaseEntity implements CaseInterface
 
     /**
      * @param int $number
+     * @param bool $showIfNull
      * @return mixed|null
      */
-    public function getCase($number)
+    public function getCase($number, $showIfNull = false)
     {
-        if (!$number) {
+        if (!$number && !$showIfNull) {
             return '';
         }
 

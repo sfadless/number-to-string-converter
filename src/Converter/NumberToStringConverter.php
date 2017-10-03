@@ -71,7 +71,7 @@ class NumberToStringConverter
         'шестьсот',
         'семьсот',
         'восемьсот',
-        'десятьсот'
+        'девятьсот'
     ];
 
     /**
@@ -147,15 +147,23 @@ class NumberToStringConverter
         return implode(' ', $combined);
     }
 
-    private function getFloatFromNumber($number)
+    public function getFloatFromNumber($number)
     {
-        $arNum = explode('.', (string) $number);
+        $ar = explode('.', (string) $number);
 
-        if (!isset($arNum[1])) {
+        if (!isset($ar[1])) {
             return 0;
         }
 
-        return (int) $arNum[1];
+        if (strlen($ar[1]) === 1) {
+            $ar[1] .= '0';
+        }
+
+        if (strlen($ar[1]) > 2) {
+            $ar[1] = substr($ar[1], 0, 2);
+        }
+
+        return (int) $ar[1];
     }
 
     /**
@@ -201,7 +209,9 @@ class NumberToStringConverter
         foreach ($compared as $key => $order) {
             $number = (int) $order[0];
 
-            $case = isset($order[1]) ? $order[1] : $this->currency->getInt();
+            $needCase = isset($order[1]);
+
+            $case = $needCase ? $order[1] : $this->currency->getInt();
 
             $converted[] = $this->getConvertedCompareInstance($number, $case);
         }
@@ -220,7 +230,7 @@ class NumberToStringConverter
     {
         return [
             $asNumber ? $number : $this->getNumberString($number, $case->getGender()),
-            $case->getCase($number)
+            $case->getCase($number, $case === $this->currency->getInt())
         ];
     }
 
@@ -232,7 +242,7 @@ class NumberToStringConverter
      *
      * @return array
      */
-    private function getOrders($number)
+    protected function getOrders($number)
     {
         if ((int) $number < 1000) {
             return [(int) $number];

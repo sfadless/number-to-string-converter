@@ -8,5 +8,8 @@
     "psr-4": {
       "Sfadless\\Utils\\": "src"
     }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^6.3"
   }
 }

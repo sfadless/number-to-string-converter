@@ -11,9 +11,11 @@ interface CaseInterface
 {
     /**
      * @param $number int
+     * @param $showIfNull bool
+     *
      * @return string
      */
-    public function getCase($number);
+    public function getCase($number, $showIfNull = false);
 
     /**
      * @return string
