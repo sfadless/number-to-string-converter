@@ -13,8 +13,8 @@
     </php>
 
     <testsuites>
-        <testsuite name="Sfadless number to string">
-            <directory>src/Tests/</directory>
+        <testsuite name="Sfadless number to string tests">
+            <directory>src/tests/</directory>
         </testsuite>
     </testsuites>
 </phpunit>
