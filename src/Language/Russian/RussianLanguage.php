@@ -40,30 +40,40 @@ class RussianLanguage implements LanguageInterface
      */
     public function convert($number, array $options = [])
     {
-        $numberInteger = 1;
-        $numberFractional = 2;
+        $separatedNumber = $this->separateNumber($number);
 
-        $currency = new Currency(
-            new Declension('рубль', 'рубля', 'рублей', Declension::GENDER_M),
-            new Declension('копейка', 'копейки', 'копеек', Declension::GENDER_F)
-        );
+        $currency = isset($options[Options::CURRENCY]) ? $options[Options::CURRENCY] : $this->getDefaultCurrency();
+        $template = isset($options[Options::TEMPLATE]) ? $options[Options::TEMPLATE] : Output::DEFAULT_TEMPLATE;
+        $variables = isset($options[Options::VARIABLES]) ? $options[Options::VARIABLES] : [];
 
         $integerCollection = $this->declensionDigitMather->match(
-            $this->numberDivider->divide($numberInteger),
+            $this->numberDivider->divide($separatedNumber->getInteger()),
             $currency->getInteger()->getGender()
         );
 
         $fractionalCollection = $this->declensionDigitMather->match(
-            $this->numberDivider->divide($numberFractional),
+            $this->numberDivider->divide($separatedNumber->getFractional()),
             $currency->getFractional()->getGender()
         );
 
-        $integer = $this->outputMetadataFactory->create($numberInteger, $integerCollection, $currency->getInteger());
-        $fractional = $this->outputMetadataFactory->create($numberFractional, $fractionalCollection, $currency->getFractional());
+        $integer = $this->outputMetadataFactory->create($separatedNumber->getInteger(), $integerCollection, $currency->getInteger());
+        $fractional = $this->outputMetadataFactory->create($separatedNumber->getFractional(), $fractionalCollection, $currency->getFractional());
 
-        $output = new Output($integer, $fractional, Output::DEFAULT_TEMPLATE);
+        $output = new Output($integer, $fractional, $template);
+
+        foreach ($variables as $variable) {
+            $output->addVariable($variable);
+        }
+
+        return $output->output();
     }
 
+    /**
+     * RussianLanguage constructor.
+     * @param NumberDivider $numberDivider
+     * @param DeclensionDigitMatcher $declensionDigitMather
+     * @param OutputMetadataFactory $outputMetadataFactory
+     */
     public function __construct(
         NumberDivider $numberDivider,
         DeclensionDigitMatcher $declensionDigitMather,
@@ -72,6 +82,38 @@ class RussianLanguage implements LanguageInterface
         $this->numberDivider = $numberDivider;
         $this->declensionDigitMather = $declensionDigitMather;
         $this->outputMetadataFactory = $outputMetadataFactory;
+    }
+
+    /**
+     * @return Currency
+     */
+    private function getDefaultCurrency()
+    {
+        return new Currency(
+            new Declension('рубль', 'рубля', 'рублей', Declension::GENDER_M),
+            new Declension('копейка', 'копейки', 'копеек', Declension::GENDER_F)
+        );
+    }
+
+    /**
+     * @param $number float
+     * @return SeparatedNumber
+     */
+    public function separateNumber($number)
+    {
+        if (! is_float($number)) {
+            return new SeparatedNumber((int) $number, 0);
+        }
+
+        $string = (string) $number;
+        $separated = explode('.', $string);
+        list($integer, $fractional) = $separated;
+
+        if (strlen($fractional) === 1) {
+            $fractional .= '0';
+        }
+
+        return new SeparatedNumber((int) $integer, (int) $fractional);
     }
 
     /**

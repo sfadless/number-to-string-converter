@@ -2,7 +2,10 @@
 
 namespace Sfadless\NumberToStringConverter\Language\Russian;
 
-use Sfadless\NumberToStringConverter\Language\Russian\Declension\Declension;
+use Sfadless\NumberToStringConverter\Language\Russian\Declension\DeclensionDigitMatcher;
+use Sfadless\NumberToStringConverter\Language\Russian\Declension\DeclensionNumberMatcher;
+use Sfadless\NumberToStringConverter\Language\Russian\Output\OutputMetadataFactory;
+use Sfadless\NumberToStringConverter\Number\NumberDivider;
 
 /**
  * RussianLanguageFactory
@@ -11,11 +14,14 @@ use Sfadless\NumberToStringConverter\Language\Russian\Declension\Declension;
  */
 class RussianLanguageFactory
 {
-    public function createDefault()
+    public function create()
     {
-        $currency = new Currency(
-            new Declension('рубль', 'рубля', 'рублей', Declension::GENDER_M),
-            new Declension('копейка', 'копейки', 'копеек', Declension::GENDER_F)
+        $declensionNumberMatcher = new DeclensionNumberMatcher();
+
+        return new RussianLanguage(
+            new NumberDivider(),
+            new DeclensionDigitMatcher(new SmallNumbersConverter(new NumbersCollection()), $declensionNumberMatcher),
+            new OutputMetadataFactory($declensionNumberMatcher)
         );
     }
 }

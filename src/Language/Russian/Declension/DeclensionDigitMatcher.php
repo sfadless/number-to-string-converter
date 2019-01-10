@@ -26,8 +26,9 @@ class DeclensionDigitMatcher
     private $declensionNumberMatcher;
 
     /**
-     * DeclensionDigitMather constructor.
+     * DeclensionDigitMatcher constructor.
      * @param SmallNumbersConverter $converter
+     * @param DeclensionNumberMatcher $declensionNumberMatcher
      * @param Declension[] $declensionChain
      */
     public function __construct(SmallNumbersConverter $converter, DeclensionNumberMatcher $declensionNumberMatcher, array $declensionChain = [])
