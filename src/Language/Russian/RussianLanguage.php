@@ -101,12 +101,13 @@ class RussianLanguage implements LanguageInterface
      */
     public function separateNumber($number)
     {
-        if (! is_float($number)) {
+        if (intval($number) == $number) {
             return new SeparatedNumber((int) $number, 0);
         }
 
         $string = (string) $number;
         $separated = explode('.', $string);
+
         list($integer, $fractional) = $separated;
 
         if (strlen($fractional) === 1) {

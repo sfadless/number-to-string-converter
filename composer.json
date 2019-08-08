@@ -1,5 +1,6 @@
 {
   "name": "sfadless/number-to-string-converter",
+  "license": "proprietary",
   "description": "Converts numbers to text",
   "require": {
     "php": "^5.6 || ^7.0",

@@ -47,6 +47,7 @@ class RussianLanguageTest extends TestCase
             ['number' => 22.08, 'integer' => 22, 'fractional' => 8],
             ['number' => 3.11, 'integer' => 3, 'fractional' => 11],
             ['number' => 3.66, 'integer' => 3, 'fractional' => 66],
+            ['number' => 3000.0, 'integer' => 3000, 'fractional' => 0],
         ];
 
         foreach ($forTest as $item) {

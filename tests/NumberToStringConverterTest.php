@@ -31,6 +31,7 @@ class NumberToStringConverterTest extends TestCase
         $data = [
             ['number' => 1.01, 'string' => 'один рубль одна копейка'],
             ['number' => 5, 'string' => 'пять рублей ноль копеек'],
+            ['number' => 3000.0, 'string' => 'три тысячи рублей ноль копеек']
         ];
 
         foreach ($data as $item) {
